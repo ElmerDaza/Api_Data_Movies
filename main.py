@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 import pandas as pd, numpy as np
 from statistics import mode
+from collections import Counter
 
 #objeto de la clase
 app = FastAPI()
@@ -13,7 +14,10 @@ webs=['amazon','disney','hulu','netflix']
 #rura inicial
 @app.get('/')
 def index():
-    return {'saludo': 'hola esta es la bienbenida'}
+    return {'saludo': 'hola esta es la bienvenida',
+    'contacto':'',
+    'redes':''
+    }
 
 #devuelve cantidad de peliculas de acuerdo con los filtros
 @app.get('/get_score_count/{platform}/{scored}/{year}')
@@ -89,12 +93,20 @@ def get_actor(platform, year):
     for  i in actores:
         lista = [elemento.strip() for elemento in i.split(',')]
         full_list+=lista
-    
+    #frecuencia de cada actor
+    frecuencias = Counter(full_list).most_common()
+    print(frecuencias[0])
+    #verificar si hay mas de un valor frecuente
+    if len(frecuencias) > 1 and frecuencias[0][1] == frecuencias[1][1]:
+        return {'mensajes':"Hay varios valores que se repiten la misma cantidad de veces, se muestran los primeros 2",
+                'data 1':frecuencias[0][0],
+                'data 2':frecuencias[1][0]}
     #verificar que exista una respuesta
-    if len(full_list)==0:
+    elif len(frecuencias)==0:
         return {'mensaje':'No existen datos para estos filtros'}
-    #se retorna el actor que mas aparece en la lista
-    return{'common_actor':mode(full_list)}
+    else:
+        #se retorna el actor que mas aparece en la lista
+        return{'common_actor':frecuencias[0][0]}
 
 @app.get('/get_max_duration/{year}/{platform}/{duration_type}')
 def get_max_duration(year = None, 
