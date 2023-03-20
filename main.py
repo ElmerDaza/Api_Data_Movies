@@ -14,9 +14,11 @@ webs=['amazon','disney','hulu','netflix']
 #rura inicial
 @app.get('/')
 def index():
-    return {'saludo': 'hola esta es la bienvenida',
-    'contacto':'',
-    'redes':''
+    return {'saludo': 'bienbenido a la api de peliculas y series por Elmer Daza',
+    'contacto':'elmer-daza@hotmail.com',
+    'redes':{'linkedin': 'linkedin.com/in/elmer-daza-207a02171/',
+            'github':'github.com/ElmerDaza'
+        }
     }
 
 #devuelve cantidad de peliculas de acuerdo con los filtros
@@ -54,12 +56,12 @@ def get_score_count(platform, scored, year):
 def get_count_platform(platform):
     """
     Cantidad de películas por plataforma con filtro de PLATAFORMA. 
-    (La función debe llamarse get_count_platform(platform))
     """
     #verificar que la plataforma sea correcta
     if platform in webs:
-        #registros correspondientes a platform
-        cantidad=data.query('ID.str.split().str.get(0).str[0] == @platform[0]')
+        #registros correspondientes a platform y que su type sea movie
+        cantidad=data.query(
+            'ID.str.split().str.get(0).str[0] == @platform[0] and type == "movie"')
     else:
         #se retorna el error en caso de no existir la plataforma
         return {'mensaje':'no es posible dar una respuesta, verifica los datos e intenta nuevamente'}
