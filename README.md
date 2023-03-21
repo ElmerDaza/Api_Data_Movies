@@ -11,6 +11,10 @@ en este README podras encontrar toda la documentacion, e instrucciones para pode
 * main.py -> archivo de codigo para la api
 * README.md -> instrucciones y documentacion del proyecto
 * requirements.txt -> dependencias necesarias para el proyecto
+* portada.png -> portada del proyecto
+* RecomendacionML.py -> archivo con la funcion de recomendacion
+* modelo_recomendacion.pkl -> modelo de recomendacion entrenado
+* recomendacion.ipynb -> entrenamiento de la red neuronal para el modelo de recomendacion
 
 ▶ Funciones que ejecuta la API ◀
 
