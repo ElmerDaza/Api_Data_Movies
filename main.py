@@ -3,6 +3,7 @@ from fastapi import FastAPI
 import pandas as pd, numpy as np
 from statistics import mode
 from collections import Counter
+import RecomendacionML as R
 
 #objeto de la clase
 app = FastAPI()
@@ -133,6 +134,15 @@ def get_max_duration(year = None,
     #resp.update({'platform':platform})
     #entregar respuesta
     return resp
+@app.get('/recomendacion/{userid}/{movieid}')
+def recomendacion(userid,movieid):
+    #validar datos
+    try:
+        userid = int(userid)
+    except:
+        return {'mensaje':'no es posible dar una respuesta, verifica los datos e intenta nuevamente'}
+    #ejecutar funcion de recomendacion y dar respuesta
+    return {'recomendar':R.predecir(userid,movieid)}
 
 def filtrar_max_duration(year = None, 
             platform = None, 
