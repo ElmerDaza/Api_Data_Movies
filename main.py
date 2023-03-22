@@ -27,7 +27,6 @@ def index():
 def get_score_count(platform, scored, year):
     """Cantidad de películas por plataforma con un puntaje 
     mayor a XX en determinado año 
-    (la función debe llamarse get_score_count(platform, scored, year))
     """
     #verificar que los datos sean validos
     try:
@@ -74,7 +73,7 @@ def get_count_platform(platform):
 def get_actor(platform, year):
     """
     Actor que más se repite según plataforma y año. 
-    (La función debe llamarse get_actor(platform, year))"""
+    """
     #comprobar que el año sea entro
     try:
         year=int(year)
@@ -134,6 +133,7 @@ def get_max_duration(year = None,
     #resp.update({'platform':platform})
     #entregar respuesta
     return resp
+    
 @app.get('/recomendacion/{userid}/{movieid}')
 def recomendacion(userid,movieid):
     #validar datos
@@ -141,8 +141,16 @@ def recomendacion(userid,movieid):
         userid = int(userid)
     except:
         return {'mensaje':'no es posible dar una respuesta, verifica los datos e intenta nuevamente'}
-    #ejecutar funcion de recomendacion y dar respuesta
-    return {'recomendar':R.predecir(userid,movieid)}
+    #consultar el registro para movieid
+    movie = data.query('title == @movieid or ID == @movieid')
+    #la consulta debe tener contenido
+    if len(movie)==0:
+        return {'mensaje':'no es posible dar una respuesta, verifica los datos e intenta nuevamente'}
+    else:
+        #ejecutar funcion de recomendacion y dar respuesta
+        print(movie['ID'].values)
+        return {'recomendar':R.predecir(userid,movie['ID'].values[0])}
+
 
 def filtrar_max_duration(year = None, 
             platform = None, 

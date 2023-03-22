@@ -1,8 +1,10 @@
 import pickle, numpy as np
 
 # cargar modelo
-with open('modelo_recomendacion.pkl', 'rb') as archivo:
-    modelo = pickle.load(archivo)
+#with open('modelo_recomendacion.pkl', 'rb') as archivo:
+#    modelo = pickle.load(archivo)
+from keras.models import load_model
+modelo = load_model('modelo_recomendacion.h5')
 
 # funcion para predecir
 def predecir(userid:int,movieid:str):
@@ -26,9 +28,10 @@ def predecir(userid:int,movieid:str):
     predic = np.stack((arreglo,arr),axis=1)
     #prediccion
     resultado=modelo.predict([predic])
+    print(resultado)
     if resultado[0][0]>3.1:
         return True
     else:
         return False
     
-predecir(1,'ns3205')
+#print(predecir(1,'ns3205'))
