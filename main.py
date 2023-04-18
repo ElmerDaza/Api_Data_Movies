@@ -40,7 +40,7 @@ def get_score_count(platform, scored, year):
     if platform in webs:
         #filtro
         respuesta = data.query(
-            'score > @scored and release_year == @year and ID.str.split().str.get(0).str[0] == @platform[0]')
+            'score > @scored and release_year == @year and type == "movie" and ID.str.split().str.get(0).str[0] == @platform[0]')
         #remplazar valores nulos por ''
         respuesta = respuesta.replace(np.nan, '')
         #respuesta
@@ -151,6 +151,31 @@ def recomendacion(userid,movieid):
         print(movie['ID'].values)
         return {'recomendar':R.predecir(userid,movie['ID'].values[0])}
 
+@app.get('/prod_per_county/{tipo}/{pais}/{anio}')
+def prod_per_county(tipo,pais,anio):
+
+    """La cantidad de contenidos/productos 
+    (todo lo disponible en streaming) que se publicó por país y año.
+    por favor usar en tipo estas dos opciones (movie, serie)"""
+
+    tip=['movie','serie']
+    try:
+        anio = int(anio)
+    except:
+        return {'mesage':'los datos no son correctos revise la informacion e intenta nuevamente'}
+
+    if tipo not in tip:
+        return {'mesage':'los datos no son correctos revise la informacion e intenta nuevamente'}
+    else:
+        resultado = data[data['country'] == pais & data['type'] & data['date_added'].dt.year==anio]
+        #data.query(
+        #    'country == @pais and type == @tipo and date_added.dt.year == @anio')
+        return{
+            'pais':pais,
+            'año':anio,
+            'productos':len(resultado)
+        }
+        
 
 def filtrar_max_duration(year = None, 
             platform = None, 
