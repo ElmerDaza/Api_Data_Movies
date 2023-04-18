@@ -29,7 +29,7 @@ def predecir(userid:int,movieid:str):
     #prediccion
     resultado=modelo.predict([predic])
     print(resultado)
-    if resultado[0][0]>3.1:
+    if resultado[0][0]>3.54:
         return True
     else:
         return False
